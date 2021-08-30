@@ -90,7 +90,7 @@ func NewClientGMTLSOneWay(serverCaCertFile string) (credentials.TransportCredent
 func NewServerGMTLSTwoWay(clientCaCertFile, serverSignCertFile, serverSignKeyFile, serverCipherCertFile, serverCipherKeyFile string) (credentials.TransportCredentials, error) {
 	log.Printf("NewServerGMTLSTwoWay")
 
-	serverSignCert, err := tls.LoadX509KeyPair(serverSignKeyFile, serverSignCertFile)
+	serverSignCert, err := tls.LoadX509KeyPair(serverSignCertFile, serverSignKeyFile)
 	if err != nil {
 		return nil, err
 	}
