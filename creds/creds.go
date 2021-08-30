@@ -1,9 +1,9 @@
 package creds
 
 import (
-	"github.com/Hyperledger-TWGC/ccs-gm/tls"
-	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"github.com/bglmmz/grpc/credentials"
+	tls "github.com/tjfoc/gmsm/gmtls"
+	"github.com/tjfoc/gmsm/x509"
 	"io/ioutil"
 	"log"
 )
@@ -16,16 +16,17 @@ func NewServerTLSOneWay(serverCertFile, serverKeyFile string) (credentials.Trans
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{serverCert},
-		ClientAuth:   tls.NoClientCert,
-		//InsecureSkipVerify: true,
+		Certificates:       []tls.Certificate{serverCert},
+		ClientAuth:         tls.NoClientCert,
+		InsecureSkipVerify: true,
 	}), nil
 }
 
 func NewClientTLSOneWay(serverCaCertFile string) (credentials.TransportCredentials, error) {
 	log.Printf("NewClientTLSOneWay")
 	return credentials.NewTLS(&tls.Config{
-		RootCAs: loadCaPool(serverCaCertFile),
+		RootCAs:            loadCaPool(serverCaCertFile),
+		InsecureSkipVerify: true,
 	}), nil
 }
 
@@ -37,10 +38,10 @@ func NewServerTLSTwoWay(clientCaCertFile, serverCertFile, serverKeyFile string) 
 
 	log.Printf("NewServerGMTLSOneWay GMSupport")
 	return credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{serverCert},
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		ClientCAs:    loadCaPool(clientCaCertFile),
-		//InsecureSkipVerify: true,
+		Certificates:       []tls.Certificate{serverCert},
+		ClientAuth:         tls.RequireAndVerifyClientCert,
+		ClientCAs:          loadCaPool(clientCaCertFile),
+		InsecureSkipVerify: true,
 	}), nil
 }
 
@@ -53,9 +54,9 @@ func NewClientTLSTwoWay(serverCaCertFile, clientCertFile, clientKeyFile string) 
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{clientCert},
-		RootCAs:      loadCaPool(serverCaCertFile),
-		//InsecureSkipVerify: true,
+		Certificates:       []tls.Certificate{clientCert},
+		RootCAs:            loadCaPool(serverCaCertFile),
+		InsecureSkipVerify: true,
 	}), nil
 }
 
@@ -72,18 +73,20 @@ func NewServerGMTLSOneWay(serverSignCertFile, serverSignKeyFile, serverCipherCer
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{serverSignCert, serverCipherCert},
-		GMSupport:    &tls.GMSupport{},
-		ClientAuth:   tls.NoClientCert,
+		Certificates:       []tls.Certificate{serverSignCert, serverCipherCert},
+		GMSupport:          &tls.GMSupport{},
+		ClientAuth:         tls.NoClientCert,
+		InsecureSkipVerify: true,
 	}), nil
 }
 
 func NewClientGMTLSOneWay(serverCaCertFile string) (credentials.TransportCredentials, error) {
 	log.Printf("NewClientGMTLSOneWay")
 	return credentials.NewTLS(&tls.Config{
-		GMSupport:  &tls.GMSupport{},
-		RootCAs:    loadCaPool(serverCaCertFile),
-		ClientAuth: tls.NoClientCert,
+		GMSupport:          &tls.GMSupport{},
+		RootCAs:            loadCaPool(serverCaCertFile),
+		ClientAuth:         tls.NoClientCert,
+		InsecureSkipVerify: true,
 	}), nil
 }
 
@@ -101,11 +104,11 @@ func NewServerGMTLSTwoWay(clientCaCertFile, serverSignCertFile, serverSignKeyFil
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{serverSignCert, serverCipherCert},
-		GMSupport:    &tls.GMSupport{},
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		ClientCAs:    loadCaPool(clientCaCertFile),
-		//InsecureSkipVerify: true,
+		Certificates:       []tls.Certificate{serverSignCert, serverCipherCert},
+		GMSupport:          &tls.GMSupport{},
+		ClientAuth:         tls.RequireAndVerifyClientCert,
+		ClientCAs:          loadCaPool(clientCaCertFile),
+		InsecureSkipVerify: true,
 	}), nil
 }
 
@@ -123,11 +126,11 @@ func NewClientGMTLSTwoWay(serverCaCertFile, clientSignCertFile, clientSignKeyFil
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{clientSignCert, clientCipherCert},
-		GMSupport:    &tls.GMSupport{},
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		RootCAs:      loadCaPool(serverCaCertFile),
-		//InsecureSkipVerify: true,
+		Certificates:       []tls.Certificate{clientSignCert, clientCipherCert},
+		GMSupport:          &tls.GMSupport{},
+		ClientAuth:         tls.RequireAndVerifyClientCert,
+		RootCAs:            loadCaPool(serverCaCertFile),
+		InsecureSkipVerify: true,
 	}), nil
 }
 
@@ -137,12 +140,7 @@ func loadCaPool(caCertFile string) *x509.CertPool {
 		log.Fatalf("failed to read CA cert file. %v", err)
 	}
 
-	cert, err := x509.Pem2Cert(pemServerCA)
-	if err != nil {
-		log.Fatalf("failed to add CA cert to cert pool. %v", err)
-		return nil
-	}
 	cp := x509.NewCertPool()
-	cp.AddCert(cert)
+	cp.AppendCertsFromPEM(pemServerCA)
 	return cp
 }
