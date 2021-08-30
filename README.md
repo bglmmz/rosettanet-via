@@ -20,7 +20,7 @@ MetadataPartyIdKey = "party_id"
 - protobuf-go v1.3.0
 
 ```
-protoc --go_out=plugins=grpc:. register/proto/*.proto
+protoc --go_out=plugins=grpc:. via/proto/*.proto
 ```
 
 - 生成后的via.pb.go，需要修改下Import的包，把grpc "google.golang.org/grpc" 改成 grpc "github.com/bglmmz/grpc"
