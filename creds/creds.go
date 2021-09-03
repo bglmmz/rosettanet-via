@@ -1,9 +1,9 @@
 package creds
 
 import (
+	tls "github.com/bglmmz/gmsm/gmtls"
+	"github.com/bglmmz/gmsm/x509"
 	"github.com/bglmmz/grpc/credentials"
-	tls "github.com/tjfoc/gmsm/gmtls"
-	"github.com/tjfoc/gmsm/x509"
 	"io/ioutil"
 	"log"
 )
@@ -35,7 +35,7 @@ func NewServerTLSTwoWay(clientCaCertFile, serverCertFile, serverKeyFile string) 
 		return nil, err
 	}
 
-	log.Printf("NewServerGMTLSOneWay GMSupport")
+	log.Printf("NewServerTLSTwoWay")
 	return credentials.NewTLS(&tls.Config{
 		Certificates: []tls.Certificate{serverCert},
 		ClientAuth:   tls.RequireAndVerifyClientCert,

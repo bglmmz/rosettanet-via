@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
+	"log"
 )
 
 type Config struct {
@@ -46,5 +47,7 @@ func LoadSSLConfig(configFile string) *Config {
 	if err != nil {
 		panic(fmt.Errorf("load ssl-conf file error. %v", err))
 	}
+
+	log.Printf("sslConfig.cipher: %s,  mode: %s", c.Conf.Cipher, c.Conf.Mode)
 	return c
 }
