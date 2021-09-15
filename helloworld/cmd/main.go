@@ -30,7 +30,8 @@ const DefaultPartyId string = "testPartyId"
 
 func init() {
 	flag.StringVar(&partner, "partner", "partner_1", "partner")
-	flag.StringVar(&address, "address", ":10040", "Math server listen address")
+	flag.StringVar(&address, "address", "192.168.112.33:50051", "Math server listen address")
+	//flag.StringVar(&address, "address", "127.0.0.1:10040", "Math server listen address")
 	flag.StringVar(&localVia, "localVia", ":10031", "local VIA address")
 	flag.StringVar(&destVia, "destVia", ":20031", "dest VIA address")
 	flag.StringVar(&sslFile, "ssl", "conf/ssl-dahui.yml", "SSL config file")
@@ -39,7 +40,6 @@ func init() {
 	if len(sslFile) > 0 {
 		sslEnabled = true
 	}
-
 }
 
 func main2() {
@@ -58,7 +58,7 @@ func main2() {
 	ctx = metadata.AppendToOutgoingContext(ctx, proxy.MetadataTaskIdKey, DefaultTaskId)
 	ctx = metadata.AppendToOutgoingContext(ctx, proxy.MetadataPartyIdKey, DefaultPartyId)
 
-	conn, err := grpc.DialContext(ctx, "localhost:10040", grpcOptions...)
+	conn, err := grpc.DialContext(ctx, address, grpcOptions...)
 	if err != nil {
 		fmt.Println("dial error:", err)
 		return
@@ -73,6 +73,7 @@ func main2() {
 	}
 	fmt.Println("helle response:", ret.Val)
 }
+
 func randMetricList() []int64 {
 	countBigInt, _ := rand.Int(rand.Reader, big.NewInt(20))
 	count := int(countBigInt.Int64())

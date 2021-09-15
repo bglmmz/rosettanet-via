@@ -3,7 +3,7 @@ module via
 go 1.15
 
 require (
-	github.com/bglmmz/gmsm v1.4.2-0.20210903050105-f7952c987a26
+	github.com/bglmmz/gmsm v1.4.2-0.20210915075405-1e6555408b72
 	github.com/bglmmz/grpc v1.15.1-0.20210903051356-12dc9d773940
 	github.com/golang/protobuf v1.4.2
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e

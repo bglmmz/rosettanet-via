@@ -1,7 +1,8 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/bglmmz/gmsm v1.4.2-0.20210903050105-f7952c987a26 h1:Fzh9X29TwxIfm/Fih8oTqQhNg/zM1rJtQyFanAahFJQ=
 github.com/bglmmz/gmsm v1.4.2-0.20210903050105-f7952c987a26/go.mod h1:89BMGnb0OjhzvK65EM4zhxwUcLhjfb9FlcQRYpvoVLw=
+github.com/bglmmz/gmsm v1.4.2-0.20210915075405-1e6555408b72 h1:tbmU0RoEEnkrvo3FbHaeXoERR7/n/7pL/AMaoj1wqi4=
+github.com/bglmmz/gmsm v1.4.2-0.20210915075405-1e6555408b72/go.mod h1:gn6S7WvXsJqpNWJbMZfGstokftdrNBc55W2euo02WJ4=
 github.com/bglmmz/grpc v1.15.1-0.20210903051356-12dc9d773940 h1:U5N+el8QjiWmAfB5Po3JCms56C8D/FbmyqcVpvzzr5M=
 github.com/bglmmz/grpc v1.15.1-0.20210903051356-12dc9d773940/go.mod h1:QnL5DWg3+ypP4LsqggJX9B+QFM/c0eN5jAnDMSwRjOw=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=

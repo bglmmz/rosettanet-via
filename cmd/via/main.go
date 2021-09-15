@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"github.com/bglmmz/grpc"
 	"github.com/bglmmz/grpc/credentials"
 	"github.com/bglmmz/grpc/peer"
@@ -27,7 +28,7 @@ var (
 
 func init() {
 	flag.StringVar(&address, "address", ":10031", "VIA service listen address")
-	flag.StringVar(&sslFile, "ssl", "", "SSL config file")
+	flag.StringVar(&sslFile, "ssl", "conf/ssl-dahui.yml", "SSL config file")
 	flag.Parse()
 
 	if len(sslFile) > 0 {
@@ -109,12 +110,18 @@ func main() {
 	//注册本身提供的服务
 	via.RegisterVIAServiceServer(viaServer, newVIAServer())
 
-	go func() {
-		viaServer.Serve(viaListener)
+	defer func() { // 必须要先声明defer，否则不能捕获到panic异常
+		if err := recover(); err != nil {
+			fmt.Println(err) // 这里的err其实就是panic传入的内容
+		}
 	}()
+
+	viaServer.Serve(viaListener)
 
 	waitForGracefulShutdown(viaServer)
 }
+
+var errUnexpectedClose = errors.New("Unexpected exception")
 
 func waitForGracefulShutdown(viaServer *grpc.Server) {
 	interruptChan := make(chan os.Signal, 1)

@@ -43,7 +43,7 @@ func init() {
 	flag.StringVar(&address, "address", ":10040", "Math server listen address")
 	flag.StringVar(&localVia, "localVia", ":10031", "local VIA address")
 	flag.StringVar(&destVia, "destVia", ":20031", "dest VIA address")
-	flag.StringVar(&sslFile, "ssl", "", "SSL config file")
+	flag.StringVar(&sslFile, "ssl", "conf/ssl-conf.yml", "SSL config file")
 	flag.Parse()
 
 	if len(sslFile) > 0 {
@@ -290,6 +290,34 @@ func bidi(s *mathServer) error {
 		log.Fatalf("结束向对方发送数字出错, %v", err)
 	}*/
 	return nil
+}
+
+func main2() {
+	lis, err := net.Listen("tcp", address)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	var grpcServer *grpc.Server
+	grpcServer = grpc.NewServer()
+	if sslEnabled {
+		log.Print("running math server with secure!")
+		grpcServer = grpc.NewServer(grpc.Creds(tlsCredentialsAsServer))
+	} else {
+		log.Print("running math server with insecure!")
+		grpcServer = grpc.NewServer()
+	}
+
+	mathServ := &mathServer{}
+
+	// Register a non-ssl server for local VIA
+	test.RegisterMathServiceServer(grpcServer, mathServ)
+	reflection.Register(grpcServer)
+
+	log.Printf("Listening on %v", address)
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
 
 func main() {
