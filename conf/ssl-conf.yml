@@ -1,5 +1,5 @@
 conf:
-  ***REMOVED***
+
   # cipher options: ssl, gmssl
   cipher: gmssl
   # mode options: one_way, two_way
