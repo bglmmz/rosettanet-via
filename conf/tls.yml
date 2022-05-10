@@ -1,5 +1,5 @@
 tls:
-  ***REMOVED***
+
   #tls mode options: one_way, two_way
   mode: one_way
 
